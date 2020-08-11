@@ -16,7 +16,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = "${mod_version}"
+version = "${mod_version}-${mc_version}"
 group = "com.tfar.${modid}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${modid}"
 
@@ -84,6 +84,7 @@ repositories{
 
     jcenter()
     mavenCentral()
+    maven { url = "https://maven.theillusivec4.top/" }
 
 }
 
@@ -95,7 +96,8 @@ dependencies {
 
     compile 'org.spongepowered:mixin:0.8'
 
-
+    compile fg.deobf("top.theillusivec4.curios:curios:${curios_version}")
+    //compileOnly fg.deobf("top.theillusivec4.curios:curios:${curios_version}:api")
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
