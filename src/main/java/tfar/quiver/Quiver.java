@@ -138,7 +138,6 @@ public class Quiver {
 				public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap,
 														 @Nullable Direction side) {
 					return CuriosCapability.ITEM.orEmpty(cap, curio);
-
 				}
 			});
 		}

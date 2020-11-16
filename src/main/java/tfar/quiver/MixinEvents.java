@@ -2,7 +2,6 @@ package tfar.quiver;
 
 import net.minecraft.entity.player.PlayerEntity;
 import tfar.quiver.mixin.ContainerAccessor;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import top.theillusivec4.curios.common.inventory.CurioSlot;

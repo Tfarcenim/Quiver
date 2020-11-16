@@ -11,6 +11,9 @@ buildscript {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
+plugins {
+    id "com.wynprice.cursemaven" version "2.1.0"
+}
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -37,6 +40,7 @@ minecraft {
     // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
+            property 'mixin.env.disableRefMap', 'true'
             workingDirectory project.file('run')
             arg "-mixin.config="+archivesBaseName+".mixins.json"
 
@@ -94,14 +98,16 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
 
-    compile 'org.spongepowered:mixin:0.8'
-
     compile fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}") // Trinkets, REQUIRED
+
+    compile fg.deobf("top.theillusivec4.caelus:caelus-forge:${version_caelus}")
+
     //compileOnly fg.deobf("top.theillusivec4.curios:curios:${curios_version}:api")
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
 
+    compile fg.deobf("curse.maven:curious-elytra:3067319")
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
