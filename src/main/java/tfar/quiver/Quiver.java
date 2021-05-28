@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiContainerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -21,10 +22,13 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.apache.commons.lang3.tuple.Pair;
 import tfar.quiver.curios.ArrowCurio;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.CuriosCapability;
@@ -56,6 +60,7 @@ public class Quiver {
 	public static final Predicate<ItemStack> arrow_predicate = stack -> stack.getItem().isIn(arrow_curios);
 
 	public Quiver() {
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		bus.addGenericListener(Item.class, this::item);
 		bus.addListener(this::comms);
@@ -68,6 +73,23 @@ public class Quiver {
 		}
 	}
 
+
+	public static final QuiverConfig CLIENT;
+	public static final ForgeConfigSpec CLIENT_SPEC;
+
+//	public static final QuiverConfig SERVER;
+//	public static final ForgeConfigSpec SERVER_SPEC;
+
+	static {
+		final Pair<QuiverConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(QuiverConfig::buildServer);
+		CLIENT_SPEC = specPair.getRight();
+		CLIENT = specPair.getLeft();
+	//	final Pair<ServerConfig, ForgeConfigSpec> specPair2 = new ForgeConfigSpec.Builder().configure(QuiverConfig::new);
+	//	SERVER_SPEC = specPair2.getRight();
+	//	SERVER = specPair2.getLeft();
+	}
+
+
 	private void arrowPickup(final EntityItemPickupEvent e) {
 		ItemStack toPickup = e.getItem().getItem();
 		PlayerEntity player = e.getPlayer();
@@ -75,6 +97,7 @@ public class Quiver {
 			return;
 		}
 
+		//todo: fix this somehow
 		if (!CuriosApi.getCuriosHelper().findEquippedCurio(Quiver.arrow_predicate, player).
 						map(stringIntegerItemStackImmutableTriple -> stringIntegerItemStackImmutableTriple.right).orElse(ItemStack.EMPTY).isEmpty()) {
 			CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(icurioitemhandler -> {
@@ -112,7 +135,7 @@ public class Quiver {
 			CuriosScreen curiosScreen = (CuriosScreen) e.getGuiContainer();
 			int i = curiosScreen.getGuiLeft();
 			int j = curiosScreen.getGuiTop();
-			curiosScreen.blit(e.getMatrixStack(),i + 77, j + 19, 7, 7, 18, 36);
+			curiosScreen.blit(e.getMatrixStack(),i + QuiverConfig.x.get(), j + QuiverConfig.y.get(), 7, 7, 18, 36);
 		}
 	}
 
